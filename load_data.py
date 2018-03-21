@@ -7,7 +7,7 @@ def load_data():
     total_date=(final_date-initial_date).days+1
     print("2015年总共有",total_date,"日")
     num1=[0 for i in range(total_date)]
-    print(num1)
+    #print(num1)
     for line in file.readlines():
         line=line.strip()
         #print(line)
@@ -21,7 +21,7 @@ def load_data():
             d2=datetime.datetime(int(date[0]),int(date[1]),int(date[2]))
             num1[(d2-initial_date).days]+=1
         #print(virtualName,date)
-    print(num1)
+    #print(num1)
 load_data()
 def is_box_sufficient(box,obj,box_scale):
     sum_value=[0 for i in range(len(obj))]
@@ -40,8 +40,8 @@ def random_solution(obj_sequence,box_scale):
     random.shuffle(obj_index_list)
     for i in range(len(obj_index_list)):
         temp=obj_index_list[i]
-        print(temp)
-        if random.randint(0,1)==0:##产生一个新箱子
+        #print(temp)
+        if random.randint(0,3)!=0:##产生一个新箱子
             box.append([])
             box[-1].append(obj_sequence[temp])
         else:
@@ -50,7 +50,7 @@ def random_solution(obj_sequence,box_scale):
                 box[rand_box_index].append(obj_sequence[temp])
             else:
                 new_box=False
-                itery=9
+                itery=100
                 while not is_box_sufficient(box[rand_box_index],obj_sequence[temp],box_scale):
                     if random.randint(0,itery)==0:
                         box.append([])
@@ -66,6 +66,9 @@ def random_solution(obj_sequence,box_scale):
         print(box[i])
 
 
-
-random_solution([[1,2],[3,2],[2,1]],[3,3])
+#随机生成物体向量集合,和箱子容量
+obj_sequence=[[random.randint(0,9),random.randint(0,9)] for i in range(20)]
+box_scale=[20,20]
+#random_solution([[1,2],[3,2],[2,1]],[3,3])
+random_solution(obj_sequence,box_scale)
         
