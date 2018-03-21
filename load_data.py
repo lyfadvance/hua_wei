@@ -23,8 +23,17 @@ def load_data():
         #print(virtualName,date)
     print(num1)
 load_data()
+def is_box_sufficient(box,obj,box_scale):
+    sum_value=[0 for i in range(len(obj))]
+    for i in range(len(box)):
+        sum_value=sum_value+box[i]
+    sum_value=sum_value+obj
+    for i in range(len(obj)):
+        if sum_value[i]>box_scale[i]:
+            return False
+    return True
 def random_solution(obj_sequence,box_scale):
-    box=[]
+    box=[[]]
     ##产生一个随机物体
     length=len(obj_sequence)
     obj_index_list=[ i for i in range(length)]
@@ -34,11 +43,29 @@ def random_solution(obj_sequence,box_scale):
         print(temp)
         if random.randint(0,1)==0:##产生一个新箱子
             box.append([])
-            box.[-1].append(obj_sequence[temp])
+            box[-1].append(obj_sequence[temp])
         else:
-            
+            rand_box_index=random.randint(0,len(box)-1)
+            if is_box_sufficient(box[rand_box_index],obj_sequence[temp],box_scale):##如果选取的物体放的下随机选取的box,则放置
+                box[rand_box_index].append(obj_sequence[temp])
+            else:
+                new_box=False
+                itery=9
+                while not is_box_sufficient(box[rand_box_index],obj_sequence[temp],box_scale):
+                    if random.randint(0,itery)==0:
+                        box.append([])
+                        box[-1].append(obj_sequence[temp])
+                        new_box=True
+                        break
+                    else:
+                        rand_box_index=random.randint(0,len(box)-1)
+                        itery=itery-1
+                if not new_box:
+                    box[rand_box_index].append(obj_sequence[temp])
+    for i in range(len(box)):
+        print(box[i])
 
 
 
-random_solution([i for i in range(10)],[1,2,3])
+random_solution([[1,2],[3,2],[2,1]],[3,3])
         
