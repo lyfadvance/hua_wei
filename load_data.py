@@ -23,11 +23,46 @@ def load_data():
         #print(virtualName,date)
     #print(num1)
 load_data()
+def add(a,b):
+    return [a[i]+b[i] for i in range(min(len(a),len(b)))]
+def div(list1,num):
+    return [list1[i]/num for i in range(len(list1))]
+def single_box_source_used(single_box):
+    obj_vector_len=2
+    sum_value=[0 for i in range(obj_vector_len)]
+    for i in range(len(box)):
+        sum_value=add(sum_value,box[i])
+    return sum_value
+def total_source_used(box):
+    obj_vector_len=2
+    sum_value=[0 for i in range(obj_vector_len)]
+    for i in range(len(box)):
+        sum_value=add(sum_value,single_box_source_used(box[i]))
+    return sum_value
+def average_source_used(box):
+    return div(total_source_used(box),len(box))
+def evaluation(box,box_scale):
+    obj_vector_len=2
+    average=average_source_used(box)
+    pingfangcha=0
+    vectorcha=0
+    #junzhicha=0
+    for i in range(len(box)):
+        singlebox=box[i]
+        single=single_box_source_used(singlebox)
+        pingfangcha+=(single[0]-average[0])*(single[0]-average[0])/(box_scale[0]*box_scale[0])+(single[1]-average[1])(single[1]-average[1])/(box_scale[1]*box_scale[1])
+        vectorcha+=((single[0]/box_scale[0])-(single[1]/box_scale[1]))*((single[0]/box_scale[0])-(single[1]/box_scale[1]))
+    ##此时得到平方差总和,向量差总和,平方差尽量大,向量差尽量小
+    pingfangcha=pingfangcha/len(box)
+    vectorcha=vectorcha/len(box)
+    gamma=0.7
+    return pingfangcha-gamma*vectorcha
+        
 def is_box_sufficient(box,obj,box_scale):
     sum_value=[0 for i in range(len(obj))]
     for i in range(len(box)):
-        sum_value=sum_value+box[i]
-    sum_value=sum_value+obj
+        sum_value=add(sum_value,box[i])
+    sum_value=add(sum_value,obj)
     for i in range(len(obj)):
         if sum_value[i]>box_scale[i]:
             return False
